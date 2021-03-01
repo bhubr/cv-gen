@@ -50,9 +50,9 @@ function processEntries(dir) {
     const data = formatExp(md)
     const details = getExpDetails(md)
     return { ...data, details }
-  })
+  });
 
-  const expTmpl = getTemplates(dir)
+  const expTmpl = getTemplates(dir);
   const expSection = ejs.render(expTmpl, { entries: formattedEntries })
   console.log(formattedEntries)
   fs.writeFileSync(join(latexSectionsDir, `${dir}.tex`), expSection);
@@ -66,7 +66,12 @@ function processEducation() {
   return processEntries('education');
 }
 
-processSkills();
+function processHobbies() {
+  return processEntries('hobbies');
+}
+
 processBaseData();
 processEducation();
+processSkills();
 processExperiences();
+processHobbies();

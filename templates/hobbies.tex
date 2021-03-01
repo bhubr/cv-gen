@@ -1,0 +1,30 @@
+%----------------------------------------------------------------------------------------
+%	SECTION TITLE
+%----------------------------------------------------------------------------------------
+
+\cvsection{Interests and Hobbies}
+
+%----------------------------------------------------------------------------------------
+%	SECTION CONTENT
+%----------------------------------------------------------------------------------------
+
+\begin{cventries}
+<% for(var i = 0; i < entries.length; i++) { %>
+%------------------------------------------------
+
+\cventry
+{<%= entries[i].title %>} % Job title
+{<%= entries[i].organization %>} % Organization
+{<%= entries[i].location %>} % Location
+{<%= entries[i].dates %>} % Date(s)
+{ % Description(s) of tasks/responsibilities
+\begin{cvitems}<%
+for(var j = 0; j < entries[i].details.length; j++) {
+%>
+\item {<%= entries[i].details[j] %>}<%  } %>
+\end{cvitems}
+}
+<%  } %>
+%------------------------------------------------
+
+\end{cventries}
