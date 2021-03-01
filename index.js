@@ -37,26 +37,36 @@ function processSkills() {
   fs.writeFileSync(join(latexSectionsDir, 'skills.tex'), skillsSection);
 }
 
-function processExperiences() {
-  const exps = readExperiences();
+function formatExp (markdown) {
+  const { data, errors } = frontmatter(markdown, { schema: expSchema })
+  if (errors.length > 0) throw new Error(`Error in ${markdown.substr(0, 20)}`)
+  return data
+}
 
-  const formatExp = (markdown) => {
-    const { data, errors } = frontmatter(markdown, { schema: expSchema })
-    if (errors.length > 0) throw new Error(`Error in ${markdown.substr(0, 20)}`)
-    return data
-  }
+function processEntries(dir) {
+  const entries = readExperiences(dir);
 
-  const experiences = exps.map(md => {
+  const formattedEntries = entries.map(md => {
     const data = formatExp(md)
     const details = getExpDetails(md)
     return { ...data, details }
   })
 
-  const expTmpl = getTemplates('experience')
-  const expSection = ejs.render(expTmpl, { experiences })
-  fs.writeFileSync(join(latexSectionsDir, 'experience.tex'), expSection);
+  const expTmpl = getTemplates(dir)
+  const expSection = ejs.render(expTmpl, { entries: formattedEntries })
+  console.log(formattedEntries)
+  fs.writeFileSync(join(latexSectionsDir, `${dir}.tex`), expSection);
+}
+
+function processExperiences() {
+  return processEntries('experience');
+}
+
+function processEducation() {
+  return processEntries('education');
 }
 
 processSkills();
 processBaseData();
+processEducation();
 processExperiences();
